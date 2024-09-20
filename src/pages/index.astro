@@ -1,16 +1,16 @@
 ---
+import type { SanityDocument } from "@sanity/client";
+import { loadQuery } from "../sanity/lib/load-query";
+import Layout from "../layouts/Layout.astro";
 
+
+const { data: posts } = await loadQuery<{ title: string; body: any[]; mainImage: any }>({
+  query: `*[_type == "post"][0...3]`
+});
+
+console.log(posts)
 ---
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+	<h1>My Blog</h1>
+	{posts.map((post) => <li><a href={`post/${post.slug.current}`}>{post.title}</a></li>)}
+</Layout>
